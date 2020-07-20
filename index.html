@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="workspace">
+    <div class="blocks" id="blocks"></div>
+      <div class="palette">
+        <div class="color" style="background-color: rgb(255, 0, 0);"></div>
+        <div class="color" style="background-color: rgb(255, 0, 106);"></div>
+        <div class="color" style="background-color: rgb(174, 0, 255);"></div>
+        <div class="color" style="background-color: rgb(153, 0, 255);"></div>
+        <div class="color" style="background-color: rgb(89, 0, 255);"></div>
+        <div class="color" style="background-color: rgb(0, 17, 255);"></div>
+        <div class="color" style="background-color: rgb(0, 132, 255);"></div>
+        <div class="color" style="background-color: rgb(0, 225, 255);"></div>
+        <div class="color" style="background-color: rgb(0, 255, 200);"></div>
+        <div class="color" style="background-color: rgb(0, 255, 170);"></div>
+        <div class="color" style="background-color: rgb(0, 255, 98);"></div>
+        <div class="color" style="background-color: rgb(72, 255, 0);"></div>
+        <div class="color" style="background-color: rgb(136, 255, 0);"></div>
+        <div class="color" style="background-color: rgb(179, 255, 0);"></div>
+        <div class="color" style="background-color: rgb(255, 251, 0);"></div>
+        <div class="color" style="background-color: rgb(255, 196, 0);"></div>
+        <div class="color" style="background-color: rgb(255, 166, 0);"></div>
+        <div class="color" style="background-color: rgb(255, 51, 0);"></div>
+        <div class="color" style="background-color: white;"></div>
+        <div class="color" style="background-color: black;"></div>
+        <input type="color" class="picker" id="picker" title="custom color">
+        <div class="tool" id="fill" title="flood fill"><img src="icons/fill-20-380839.png" width="40" height="40"></div>
+        <div class="tool" id="brush" title="brush"><img src="icons/120.png" width="30" height="30"></div>
+        <div class="tool" id="clean" title="clean a pixel"><img src="icons/computer-icons-clip-art-portable-network-graphics-download-scalable-vector-graphics-png-favpng-c6Q6N3hVhB5R73PYBtrMZjkj3.png" width="20" height="20"></div>
+        <div class="tool" id="undo" title="Undo"><img src="icons/icon-ios7-undo-512.png" width="40" height="40"></div>
+        <div class="current">
+          <p1 class="current_label">CURRENT COLOR ></p1>
+          <div id="current_detector"></div>
+        </div>
+      </div>
+    </div>
+    <div class="button">
+      <div class="clear_button" id="clear" title="clear area"><p class="m-0">x</p></div>
+      <div class="save_button" id="save" title="save this picture"><img src="/icons/Webp.net-resizeimage.png" width="16"></div>
+    </div>
+  <script src="scriptts.js"></script>
+</body>
+</html>
