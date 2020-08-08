@@ -16,12 +16,12 @@ var if_clean = false;
 current.style.background = color;
 var if_brush = true;
 var undo_button = document.getElementById("undo");
-var undo_list = []
-var count_collection = []
+var undo_list = [];
+var count_collection = [];
 var brush_collection = 0;
-var eye_dropper = document.getElementById("dropper")
+var eye_dropper = document.getElementById("dropper");
 var if_drop = false;
-var load = document.getElementById("load")
+var load = document.getElementById("load");
 
 
 //*? ask for saving*//
