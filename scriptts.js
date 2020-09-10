@@ -1,27 +1,29 @@
-var blocks = document.querySelector('.blocks');
+var blocks = $('.blocks');
+var field = $(".blocks");
+var current = $("#current_detector");
+var picker = $("#picker");
+var save = $("#save");
+var clear_button = $("#clear");
+var fill = $("#fill");
+var brush = $("#brush");
+var clean = $("#clean");
+var undo_button = $("#undo");
+var eye_dropper = $("#dropper")
+var load = $("#load")
+
 var color = "white";
 var mousedown = false;
-var field = document.querySelector(".blocks");
-var current = document.getElementById("current_detector");
-var picker = document.getElementById("picker");
 var myStorage = window.localStorage;
-var save = document.getElementById("save");
-var clear_button = document.getElementById("clear");
 var if_changed = false;
-var fill = document.getElementById("fill");
 var if_fill = false;
-var brush = document.getElementById("brush");
-var clean = document.getElementById("clean");
 var if_clean = false;
-current.style.background = color;
+current.css({"background": color});
 var if_brush = true;
-var undo_button = document.getElementById("undo");
 var undo_list = []
 var count_collection = []
 var brush_collection = 0;
-var eye_dropper = document.getElementById("dropper")
 var if_drop = false;
-var load = document.getElementById("load")
+
 
 
 //*? ask for saving*//
@@ -41,21 +43,22 @@ if(if_changed){
 var border_right = 0;
 var border_left = 0;
 for(var i=0; i<1104;i++){
-  var child = document.createElement("span");
-  child.classList.add('brick')
+  var child = $("<span>");
+  child.addClass('brick')
   border_right++;
   if(border_left==0){
-    child.classList.add("border_left")
+    child.addClass("border_left")
   }
   border_left++;
   if(border_right==46){
-    child.classList.add("border_right")
+    child.addClass("border_right")
     border_right = 0;
     border_left = 0;
   }
-  blocks.appendChild(child)
+  blocks.append(child)
 }
-var bricks = document.querySelectorAll('.brick')
+var bricks = $('.brick')
+// var bricks = document.querySelectorAll('.brick')
 
 //*? ------------------------------------------ *//
 
@@ -64,14 +67,15 @@ var bricks = document.querySelectorAll('.brick')
 if(myStorage.length > 0){
   const json = myStorage[myStorage.key(myStorage.length-1)];
   const save_obj = JSON.parse(json);
+
   for(var i=0; i<bricks.length; i++){
-    bricks[i].style.backgroundColor = save_obj[i];
-    if(save_obj[i] != ""){
-        bricks[i].style.height = "14px";
-        bricks[i].style.width = "14px";
-        bricks[i].style.marginRight = "2px";
-        bricks[i].style.marginLeft = "-3px";
-        bricks[i].style.marginTop = "-5px";
+    bricks.eq(i).css({"background-color": save_obj[i]});
+    if(save_obj[i] != ""){  
+        bricks.eq(i).css({"height": "14px"});
+        bricks.eq(i).css({"width": "14px"});
+        bricks.eq(i).css({"margin-right": "2px"});
+        bricks.eq(i).css({"margin-left": "-3px"});
+        bricks.eq(i).css({"margin-top": "-5px"});
     }
   }
 }
@@ -90,11 +94,11 @@ document.body.addEventListener("mousedown", function(e){
     e.stopPropagation();
   })
 
-field.addEventListener("mousedown", function(e){
+field.on("mousedown", function(e){
   mousedown = true;
   e.stopPropagation();
 })
-field.addEventListener("mouseup", function(e){
+field.on("mouseup", function(e){
   mousedown = false;
   if(brush_collection!=0)
     count_collection.push(brush_collection);
@@ -106,10 +110,11 @@ field.addEventListener("mouseup", function(e){
 
 //*? one click changes*//
 
-bricks.forEach(function(elem, index){
-  elem.addEventListener('click', function(e){
+bricks.each(function(index){
+  $(this).on('click', function(e){
     if(if_fill){
-      fill_function(index, e.target.style.backgroundColor);
+      if(color!=$(this).css("background-color"))
+        fill_function(index, e.target.style.backgroundColor);
       count_collection.push(brush_collection);
       brush_collection = 0;
       if_changed = true;
@@ -142,20 +147,20 @@ bricks.forEach(function(elem, index){
     }
     if(if_drop){
       color = e.target.style.backgroundColor;
-      current.style.background = color;
+      current.css({"background": color});
     }
     })
 //*? ------------------------------------------ *//
 
 //*? brush*//
 
-  elem.addEventListener("mousedown", function(e){
+  $(this).on("mousedown", function(e){
     mousedown = true;
     e.stopPropagation();
     
   })
 
-  elem.addEventListener("mouseup", function(e){
+  $(this).on("mouseup", function(e){
     mousedown = false;
     if(brush_collection!=0)
       count_collection.push(brush_collection);
@@ -163,7 +168,7 @@ bricks.forEach(function(elem, index){
     e.stopPropagation();
   })
 
-  elem.addEventListener("mouseenter", function(e){
+  $(this).on("mouseenter", function(e){
     if(mousedown && !if_fill && if_brush){
       undo_list.push({"before":e.target.style.backgroundColor,"coordinates":index})
       brush_collection++;
@@ -178,7 +183,7 @@ bricks.forEach(function(elem, index){
   })
 })
 
-brush.addEventListener("click", function(){
+brush.on("click", function(){
   setCursorByID("blocks", "default");
   if_brush = set_tool();
  })
@@ -192,7 +197,7 @@ function removeSpaces(string) {
   return string.split(' ').join('');
  }
 
-save.addEventListener("click", function(){  
+save.on("click", function(){  
   try{
     var close_close = document.querySelector(".close_menu");
     var menu_close = document.querySelector(".options");
@@ -218,11 +223,15 @@ save.addEventListener("click", function(){
   submit.classList.add('submit');
   submit.addEventListener("click", function(){
     var line = [];
-    bricks.forEach(function(e){
-      line.push([e.style.backgroundColor]);
+    bricks.each(function(e){
+      if ($(this).css("margin-top") == '-1px'){
+        line.push([""]);
+        }
+      else {
+      line.push([$(this).css("background-color")]);
+    }
     })
     myStorage.setItem(save_area.value, JSON.stringify(line));
-    console.log(myStorage[save_area.value]);
     menu.remove();
     close_menu.remove();
   })
@@ -234,19 +243,19 @@ save.addEventListener("click", function(){
 
 })
 
-clear_button.addEventListener("click", function(){
-  bricks.forEach(function(e){
-    e.style.backgroundColor = "";
-    e.style.height = "10px";
-    e.style.width = "10px";
-    e.style.marginRight = "3px";
-    e.style.marginLeft = "";
-    e.style.marginTop = "-1px";
+clear_button.on("click", function(){
+  bricks.each(function(){
+    $(this).css({"background-color": ""})
+    $(this).css({"height": "10px"});
+    $(this).css({"width": "10px"});
+    $(this).css({"margin-right": "3px"});
+    $(this).css({"margin-left": ""});
+    $(this).css({"margin-top": "-1px"});
   })
   if_changed = false;
 })
 
-load.addEventListener("click", function(){
+load.on("click", function(){
   try{
     var close_close = document.querySelector(".close_menu");
     var menu_close = document.querySelector(".options");
@@ -292,24 +301,26 @@ load.addEventListener("click", function(){
         const json = myStorage[e.target.textContent];
         const save_obj = JSON.parse(json);
         for(var i=0; i<bricks.length; i++){
-          bricks[i].style.backgroundColor = save_obj[i];
-          if(save_obj[i] != ""){
-            bricks[i].style.height = "14px";
-            bricks[i].style.width = "14px";
-            bricks[i].style.marginRight = "2px";
-            bricks[i].style.marginLeft = "-3px";
-            bricks[i].style.marginTop = "-5px";
+          bricks.eq(i).css({"background-color": save_obj[i]});
+          if(save_obj[i] == ""){  
+
+            bricks.eq(i).css({"background-color": ""});
+            bricks.eq(i).css({"height": "10px"});
+            bricks.eq(i).css({"width": "10px"});
+            bricks.eq(i).css({"margin-right": "3px"});
+            bricks.eq(i).css({"margin-left": ""});
+            bricks.eq(i).css({"margin-top": "-1px"});
           }
           else{
-            bricks[i].style.backgroundColor = "";
-            bricks[i].style.height = "10px";
-            bricks[i].style.width = "10px";
-            bricks[i].style.marginRight = "3px";
-            bricks[i].style.marginLeft = "";
-            bricks[i].style.marginTop = "-1px";
+            bricks.eq(i).css({"height": "14px"});
+            bricks.eq(i).css({"width": "14px"});
+            bricks.eq(i).css({"margin-right": "2px"});
+            bricks.eq(i).css({"margin-left": "-3px"});
+            bricks.eq(i).css({"margin-top": "-5px"});
           }
         }
       })
+
       delete_button.addEventListener("click", function(){
         myStorage.removeItem(e.target.textContent);
         buttons_load.remove();
@@ -345,41 +356,46 @@ var set_tool = function(){
   return true;
 }
 
-picker.addEventListener("input", function(e){
+picker.on("input", function(e){
   e.target.setAttribute("value", e.target.value);
   color = e.target.value;
-  current.style.background = color;
+  current.css({"background": color});
 })
 
 document.querySelectorAll('.color').forEach(function(elem){
   elem.addEventListener('click', function(e){
     color = e.target.style.backgroundColor
-    current.style.background = color;
+    current.css({"background": color});
   })
 })
 
-fill.addEventListener("click", function(){
+fill.on("click", function(){
   setCursorByID("blocks", "crosshair ");
   if_fill = set_tool();
 })
 
 function setCursorByID(id,cursorStyle) {
   var elem;
-  if (document.getElementById &&
-     (elem=document.getElementById(id)) ) {
+  if (elem=document.getElementById(id))  {
    if (elem.style) elem.style.cursor=cursorStyle;
   }
  }
 
  var fill_function = function(index, field_color){
   brush_collection++;
-  undo_list.push({"before":bricks[index].style.backgroundColor,"coordinates":parseInt(index)});
-  bricks[index].style.backgroundColor = color;
-  bricks[index].style.height = "14px";
-  bricks[index].style.width = "14px";
-  bricks[index].style.marginRight = "2px";
-  bricks[index].style.marginLeft = "-3px";
-  bricks[index].style.marginTop = "-5px";
+  if (bricks.eq(index).css("margin-top") == '-1px'){
+    undo_list.push({"before":"","coordinates":parseInt(index)});
+  }
+  else{
+  undo_list.push({"before":bricks.eq(index).css("background-color"),"coordinates":parseInt(index)});
+  }
+  bricks.eq(index).css({"background-color": color});
+  bricks.eq(index).css({"height": "14px"});
+  bricks.eq(index).css({"width": "14px"});
+  bricks.eq(index).css({"margin-right": "2px"});
+  bricks.eq(index).css({"margin-left": "-3px"});
+  bricks.eq(index).css({"margin-top": "-5px"});
+
   if(bricks[index-46]){
     if(bricks[index-46].style.backgroundColor == field_color)
       fill_function(index-46, field_color);
@@ -404,37 +420,37 @@ function setCursorByID(id,cursorStyle) {
     return;
  }
 
- clean.addEventListener("click", function() {
+ clean.on("click", function() {
   setCursorByID("blocks", "not-allowed");
   if_clean = set_tool();
  })
 
- undo_button.addEventListener("click", function(){
+ undo_button.on("click", function(){
   var pixels = count_collection.pop();
   var length = undo_list.length;
 
   for(var i=length-1; i>=(length)-pixels; i--){
     var pixel = undo_list.pop();
     if(pixel["before"]!=""){
-      bricks[pixel["coordinates"]].style.backgroundColor = pixel["before"];
-      bricks[pixel["coordinates"]].style.height = "14px";
-      bricks[pixel["coordinates"]].style.width = "14px";
-      bricks[pixel["coordinates"]].style.marginRight = "2px";
-      bricks[pixel["coordinates"]].style.marginLeft = "-3px";
-      bricks[pixel["coordinates"]].style.marginTop = "-5px";
+      bricks.eq(pixel["coordinates"]).css({"background-color": pixel["before"]});
+      bricks.eq(pixel["coordinates"]).css({"height": "14px"});
+      bricks.eq(pixel["coordinates"]).css({"width": "14px"});
+      bricks.eq(pixel["coordinates"]).css({"margin-right": "2px"});
+      bricks.eq(pixel["coordinates"]).css({"margin-left": "-3px"});
+      bricks.eq(pixel["coordinates"]).css({"margin-top": "-5px"});
     }
     else{
-      bricks[pixel["coordinates"]].style.backgroundColor = "";
-      bricks[pixel["coordinates"]].style.height = "10px";
-      bricks[pixel["coordinates"]].style.width = "10px";
-      bricks[pixel["coordinates"]].style.marginRight = "3px";
-      bricks[pixel["coordinates"]].style.marginLeft = "";
-      bricks[pixel["coordinates"]].style.marginTop = "-1px";
+      bricks.eq(pixel["coordinates"]).css({"background-color": ""});
+      bricks.eq(pixel["coordinates"]).css({"height": "10px"});
+      bricks.eq(pixel["coordinates"]).css({"width": "10px"});
+      bricks.eq(pixel["coordinates"]).css({"margin-right": "3px"});
+      bricks.eq(pixel["coordinates"]).css({"margin-left": ""});
+      bricks.eq(pixel["coordinates"]).css({"margin-top": "-1px"});
     }
   }
  })
 
- eye_dropper.addEventListener("click", function(){
+ eye_dropper.on("click", function(){
   setCursorByID("blocks", "help");
   if_drop = set_tool();
  })
